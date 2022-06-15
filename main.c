@@ -44,8 +44,8 @@ int main() {
 			}
 			if ((i % (1024 * 1024)) == 0) {
 				*n_p = *n_p + 0x10000;
-				m = (*func_ptr)(m);
-				k++;
+				for (k = 0; k < 1024; k++)
+					m = (*func_ptr)(m);
 			}
 		}
 	}
