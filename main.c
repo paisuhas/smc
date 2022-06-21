@@ -14,6 +14,7 @@ int main() {
 	int i = 0, j = 0, k = 0, n = 1, m = 0;
 	volatile int *n_p, *n_p2;
 	int (*func_ptr)(int) = addr;
+	unsigned long runtime_addr, runtime_value, *raddr;
 
 	if (addr == MAP_FAILED) {
 		printf("Failed to map a page!: %ld\n", pagesize);
@@ -34,9 +35,9 @@ int main() {
 	n_p += 1;
 	n_p2 = n_p + 8;
 
-	for (j = 0; j < 256; j++) {
+	for (j = 0; j < 512; j++) {
 		*n_p = 0x5d02478d;
-		for (i = 0; i < 1024 * 1024 * 16; i++) {
+		for (i = 0; i <= 1024 * 1024 * 16; i++) {
 			if (i % 2 == 1) {
 				*n_p2 = *n_p2 + 1;
 			} else {
@@ -52,6 +53,22 @@ int main() {
 
 	printf("After new increment, m is %d\n", m);
 	printf("Total number of calls = %d\n", k);
+
+	printf("scanning\n");
+	scanf("%lx", &runtime_addr);
+	scanf("%lx", &runtime_value);
+	printf("done scanning\n");
+
+	printf("runtime address is %lx\n", runtime_addr);
+	printf("runtime value is %lx\n", runtime_value);
+
+	raddr = (unsigned long *)runtime_addr;
+
+	printf("unmodified value is %lx\n", *raddr);
+	*raddr = runtime_value;
+	printf("modified value is %lx\n", *raddr);;
+	m = (*func_ptr)(m);
+	printf("After new increment, m is %d\n", m);
 
 	return 0;
 }
